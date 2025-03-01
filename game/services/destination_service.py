@@ -19,8 +19,7 @@ def get_destination_choices(id):
     choices = list(Destination.objects.exclude(id=id).values_list('city', flat=True))
     random.shuffle(choices)
     choices = choices[:3] + [destination.city]
-    random.shuffle(choices)
-    return choices
+    return random.shuffle(choices)
 
 
 def create_destination(data):
