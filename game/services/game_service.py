@@ -28,7 +28,7 @@ def guess(guessed_city, destination_id, player):
 
 def end(player):
     game_key = f'game_session_{player.id}'
-    score_key = f'user_score_{player.id}'
+    score_key = f'player_score_{player.id}'
     if not cache.get(game_key):
         return {'status': False, 'message': "No active game session!"}
     score = cache.get(score_key, {'correct': 0, 'incorrect': 0})

@@ -19,7 +19,8 @@ def get_destination_choices(id):
     choices = list(Destination.objects.exclude(id=id).values_list('city', flat=True))
     random.shuffle(choices)
     choices = choices[:3] + [destination.city]
-    return random.shuffle(choices)
+    random.shuffle(choices)
+    return choices
 
 
 def create_destination(data):
@@ -38,14 +39,14 @@ def create_destination(data):
     return {'status': True, 'message': "Destination created successfully"}
 
 
-def bulk_create_destinations(data_list, user):
+def bulk_create_destinations(data_list, player):
     destinations = []
     for data in data_list:
         destination = Destination(city=data.get('city'), country=data.get('country'),
             clues=utility.list_to_paragraph(data.get('clues')),
             fun_fact=utility.list_to_paragraph(data.get('fun_fact')),
             trivia=utility.list_to_paragraph(data.get('trivia')),
-            created_by=user, updated_by=user,  
+            created_by=player, updated_by=player,  
         )
         destinations.append(destination)
     Destination.objects.bulk_create(destinations, ignore_conflicts=True)
