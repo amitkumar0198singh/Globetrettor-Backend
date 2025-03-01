@@ -22,14 +22,7 @@ class DestinationView(viewsets.ViewSet):
         serializer = DestinationSerializer(destinations, many=True)
         return Response({'status': True, 'message': "Destinations found", 
                         'destinations': serializer.data}, status=status.HTTP_200_OK)
-    
 
-    @action(detail=False, methods=['get'], url_path='random', url_name='random')
-    def random(self, request):
-        destination = random.choice(destination_service.get_all_destinations())
-        choices = destination_service.get_destination_choices(destination.id)
-        return Response({'id': destination.id, 'clues': random.sample(destination.clues, 2), 
-                        'choices': choices}, status=status.HTTP_200_OK)
     
     @action(detail=False, methods=['post'], url_path='create', url_name='create', permission_classes=[IsAuthenticated])
     def create_destination(self, request):
