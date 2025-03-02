@@ -14,3 +14,10 @@ class InvitePlayerView(APIView):
                                                         status=status.HTTP_400_BAD_REQUEST)
         response = player_service.invite_player(player_username, request.user)
         return Response(response, status=status.HTTP_201_CREATED)
+    
+
+class LeaderbaordView(APIView):
+   def get(self, request):
+        leaderboard = player_service.get_player_leaderboard()
+        leaderboard_list = [{'username': lb.player.username, 'highest_score': lb.highest_score} for lb in leaderboard]
+        return Response(leaderboard_list, status=status.HTTP_200_OK)

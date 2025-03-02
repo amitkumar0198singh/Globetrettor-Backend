@@ -2,7 +2,7 @@ import random
 
 from django.core.cache import cache
 
-from game.models.leaderboard import Leaderboard
+from game.models.profile import Profile
 from game.services import destination_service
 
 
@@ -11,13 +11,18 @@ def guess(guessed_city, destination_id, player):
     correct = guessed_city.lower() == destination.city.lower()
     fun_fact = destination.fun_fact.split('\n')
 
-    leaderboard_entry, created = Leaderboard.objects.get_or_create(player=player)
+    cache_key = f'player_score_{player.id}'
+    score = cache.get(cache_key, {'correct': 0, 'incorrect': 0})
     if correct:
-        leaderboard_entry.correct_answer += 1
+        score['correct'] += 1
     else:
-        leaderboard_entry.incorrect_answer += 1
-    leaderboard_entry.save()
-    score = {'correct': leaderboard_entry.correct_answer, 'incorrect': leaderboard_entry.incorrect_answer}
+        score['incorrect'] += 1
+    cache.set(cache_key, score)
+    player_profile, created = Profile.objects.get_or_create(player=player)
+    player_profile.latest_score = score['correct']
+    if score['correct'] > player_profile.highest_score:
+        player_profile.highest_score = score['correct']
+    player_profile.save()
     return {
         "correct": correct,
         "message": "🎉 Correct! Here's a fun fact:" if correct else "😢 Incorrect! But did you know?",
@@ -34,9 +39,4 @@ def end(player):
     score = cache.get(score_key, {'correct': 0, 'incorrect': 0})
     cache.delete(game_key)
     cache.delete(score_key)
-    leaderboard_entry, created = Leaderboard.objects.get_or_create(player=player)
-    if score['correct'] > leaderboard_entry.correct_answer:
-        leaderboard_entry.correct_answer = score['correct']
-        leaderboard_entry.incorrect_answer = score['incorrect']
-        leaderboard_entry.save()
     return {'status': True, 'message': "Game over!", 'final_score': score}

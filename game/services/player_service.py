@@ -43,3 +43,7 @@ def invite_player(invited_player_username, invited_by):
     return {
         'status': True, 'message': "Player Invited successfully", 'player': invited_player_username 
     }
+
+
+def get_player_leaderboard():
+    return Player.objects.select_related('player').order_by('-highest_score')[:10]
