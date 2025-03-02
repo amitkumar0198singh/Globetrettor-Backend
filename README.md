@@ -1,4 +1,3 @@
-```markdown
 # Globetrotter - Travel Guessing Game API
 
 Globetrotter is a full-stack travel guessing game web app where players receive AI-generated destination clues and attempt to guess the correct location. The game includes a leaderboard, a challenge-a-friend feature, and a scoring system. This repository contains the backend API built using Django and Django REST Framework (DRF).
