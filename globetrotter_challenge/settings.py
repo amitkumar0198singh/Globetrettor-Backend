@@ -26,7 +26,20 @@ SECRET_KEY = 'django-insecure-bk6$$$hi2qv6gr214k6pg5un*2v@a$rmoq&utaxpwu&t7t9&6c
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+
+# cors origin
+CORS_ORIGIN_ALLOW_ALL = True
+
+# cors methods
+CORS_ALLOW_METHODS = [
+    'GET',
+    'POST',
+    'PUT',
+    'PATCH',
+    'DELETE',
+    # 'OPTIONS'
+]
 
 
 # Application definition
@@ -41,11 +54,13 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'game',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -88,7 +103,7 @@ DATABASES = {
     }
 }
 
-AUTH_USER_MODEL = 'game.User'
+AUTH_USER_MODEL = 'game.Player'
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -157,6 +172,9 @@ SIMPLE_JWT = {
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
     ),
     'EXCEPTION_HANDLER': 'game.utils.custom_exceptions.custom_exception_handler',
 }

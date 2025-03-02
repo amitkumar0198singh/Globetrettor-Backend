@@ -30,6 +30,11 @@ class InvalidCredentialException(CustomException):
     status_code = status.HTTP_401_UNAUTHORIZED
 
 
+class PasswordRequiredException(CustomException):
+    message = 'Password is required'
+    status_code = status.HTTP_400_BAD_REQUEST
+
+
 def custom_exception_handler(exc, context):
     response = exception_handler(exc, context)
     if isinstance(exc, InvalidToken):
