@@ -31,14 +31,7 @@ def get_player_by_username_or_email(username_or_email):
     except Player.DoesNotExist:
         raise custom_exceptions.DataNotFoundException('Player not found')
     
-
-def get_player(field_name, field_value):
-    try:
-        return Player.objects.get(**{field_name: field_value})
-    except Player.DoesNotExist:
-        raise custom_exceptions.DataNotFoundException('Player not found')
     
-
 
 def invite_player(invited_player_username, invited_by):
     player: Player = Player.objects.create_player(username=invited_player_username, is_invited=True)

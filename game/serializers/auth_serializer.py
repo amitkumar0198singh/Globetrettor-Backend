@@ -25,7 +25,7 @@ class LoginSerializer(serializers.Serializer):
     password = serializers.CharField(max_length=255, required=False)
 
     def validate(self, data):
-        player: Player = player_service.get_player('username', data.get('username_or_email'))
+        player: Player = player_service.get_player_by_username_or_email(data.get('username_or_email'))
         if not player.is_invited and not data.get('password'):
             raise custom_exceptions.PasswordRequiredException('Password is required for regular players')
         return data
