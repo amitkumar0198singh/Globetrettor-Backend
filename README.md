@@ -68,6 +68,7 @@ Globetrotter is a full-stack travel guessing game web app where players receive 
 
 4. Run database migrations:
    ```sh
+   python manage.py makemigrations
    python manage.py migrate
    ```
 
